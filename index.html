@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Risk Assessment Tool for AI Act</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <script src="https://eyereasoner.github.io/eye-js/2/latest/index.js"></script>
+  <style type="text/css">
+    body {
+      max-width: 800px;
+      margin: auto;
+    }
+    fieldset {
+      width: 400px;
+    }
+    select {
+      width: 400px;
+    }
+    #run {
+      line-height: 2.5;
+      border:  2px solid #222;
+      margin-top: 5px;
+    }
+    #response {
+      margin-top: 5px;
+      border:  2px solid black;
+      padding-left: 2px;
+      font-family: monospace;
+      width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Risk Assessment Tool for AI Act</h1>
+  <form>
+    <fieldset>
+      <legend>Domain:</legend>
+      <select id="select-domain">
+              <option selected="selected" value="">Any</option>
+              <option value="AdministrationOfDemocraticProcesses"> Administration Of Democratic Processes</option>
+              <option value="AdministrationOfJustice"> Administration Of Justice</option>
+              <option value="Asylum"> Asylum</option>
+              <option value="BorderControl"> Border Control</option>
+              <option value="CriticalInfrastructure"> Critical Infrastructure</option>
+              <option value="Education"> Education</option>
+              <option value="Employment"> Employment</option>
+              <option value="LawEnforcement"> Law Enforcement</option>
+              <option value="Migration"> Migration</option>
+              <option value="PrivateService"> Private Service</option>
+              <option value="PublicService"> Public Service</option>
+              <option value="OtherDomain">Other</option>
+            </select>
+    </fieldset>
+    <fieldset>
+      <legend>Purpose:</legend>
+      <select id="select-purpose">
+        <option selected="selected" value="">Any</option>
+        <option value="AdvertisingVacancies"> Advertising Vacancies</option>
+        <option value="ApplyingTheLawToFacts"> Applying The Law To Facts</option>
+        <option value="AssessingCreditworthiness"> Assessing Creditworthiness</option>
+        <option value="AssessingHealthRisk"> Assessing Health Risk</option>
+        <option value="AssessingPastCriminalBehaviour"> Assessing Past Criminal Behaviour</option>
+        <option value="AssessingPeopleRelatedRisk"> Assessing People Related Risk</option>
+        <option value="AssessingPersonalityTraits"> Assessing Personality Traits</option>
+        <option value="AssessingRiskForPotentialVictimsOfCriminalOffences"> Assessing Risk For Potential Victims Of Criminal Offences</option>
+        <option value="AssessingRiskOfIrregularImmigration"> Assessing Risk Of Irregular Immigration</option>
+        <option value="AssessingRiskOfOffending"> Assessing Risk Of Offending</option>
+        <option value="AssessingRiskOfReoffending"> Assessing Risk Of Reoffending</option>
+        <option value="AssessingSecurityRisk"> Assessing Security Risk</option>
+        <option value="AssigningPeopleToEducationalInstitutions"> Assigning People To Educational Institutions</option>
+        <option value="BorderControlSecurityCheck"> Border Control Security Check</option>
+        <option value="DeterminingAccessToEducation"> Determining Access To Education</option>
+        <option value="DeterminingAdmissionToEducationalInstitutions"> Determining Admission To Educationa Institutions</option>
+        <option value="DeterminingCreditScore"> Determining Credit Score</option>
+        <option value="DispatchingEmergencyService"> Dispatching  Emergency Service</option>
+        <option value="EvaluatingEligibilityToAccessPublicAssistanceServices"> Evaluating Eligibility To Access Public Assistance Services</option>
+        <option value="EvaluatingEmployeeBehaviour"> Evaluating Employee Behaviour</option>
+        <option value="EvaluatingEmployeePerformance"> Evaluating Employee Performance</option>
+        <option value="EvaluatingJobCandidates"> Evaluating Job Candidates</option>
+        <option value="EvaluatingLearningOutcomes"> Evaluating Learning Outcomes</option>
+        <option value="EvaluatingReliabilityOfEvidence"> Evaluating Reliability Of Evidence</option>
+        <option value="ExaminingAsylumApplication"> Examining Asylum Application</option>
+        <option value="ExaminingMigrationRelatedComplaints"> Examining Migration Related Complaints</option>
+        <option value="ExaminingResidencePermitsApplication"> Examining Residence Permits Application</option>
+        <option value="ExaminingVisaApplication"> Examining Visa Application</option>
+        <option value="GrantingPublicAssistanceServices"> Granting Public AssistanceS ervices</option>
+        <option value="HealthInsurancePricing"> Health Insurance Pricing</option>
+        <option value="HealthInsuranceRiskAssessment"> Health Insurance Risk Assessment</option>
+        <option value="InterpretingFacts"> Interpreting Facts</option>
+        <option value="InterpretingLaw"> Interpreting Law</option>
+        <option value="InvestigatingCriminalOffences"> Investigating Criminal Offences</option>
+        <option value="JobApplicationAnalysis"> Job Application Analysis</option>
+        <option value="JobApplicationFiltering"> Job Application Filtering</option>
+        <option value="LifeInsuranceRiskAssessment"> Life Insurance Risk Assessment</option>
+        <option value="MakingPromotionDecision"> Making Promotion Decision</option>
+        <option value="MakingTerminationDecision"> Making Termination Decision</option>
+        <option value="ManagementAndOperationOfSafety"> Management And Operation Of Safety</option>
+        <option value="MonitoringEmployeeBehaviour"> Monitoring Employee Behaviour</option>
+        <option value="MonitoringEmployeePerformance"> Monitoring Employee Performance</option>
+        <option value="PerformingBackgroundCheck"> Performing Background Check</option>
+        <option value="PredictingOccurrenceOfCriminalOffence"> Predicting Occurrence Of Criminal Offence</option>
+        <option value="PredictingReoccurrenceOfCriminalOffence"> Predicting Reoccurrence Of Criminal Offence</option>
+        <option value="PrioritisationOfEmergencyService"> Prioritisation Of Emergency Service</option>
+        <option value="ProsecutingCriminalOffences"> Prosecuting Criminal Offences</option>
+        <option value="ReclaimingPublicAssistanceServices"> Reclaiming Public Assistance Services</option>
+        <option value="Recruiting"> Recruiting</option>
+        <option value="ReducingPublicAssistanceServices"> Reducing Public Assistance Services</option>
+        <option value="RemoteIdentificationOfPeople"> Remote Identification Of People</option>
+        <option value="RevokingPublicAssistanceServices"> Revoking Public Assistance Services</option>
+        <option value="VerificationOfAsylumSeekerClaims"> Verification Of Asylum Seeker Claims</option>
+        <option value="VerificationOfMigrationSeekerClaims"> Verification Of Migration Seeker Claims</option>
+        <option value="OtherPurpose">Other</option>
+      </select>
+    </fieldset>
+    <fieldset>
+      <legend>Capability:</legend>
+      <select id="select-capability"  >
+          <option selected="selected" value="">Any</option>
+          <option value="ActionRecognition"> Action Recognition</option>
+          <option value="AutomaticSummarisation"> Automatic Summarisation</option>
+          <option value="BehaviourAnalysis"> Behaviour Analysis</option>
+          <option value="BiometricIdentification"> Biometric Identification</option>
+          <option value="ComputerVision"> Computer Vision</option>
+          <option value="DialogueManagement"> Dialogue Management</option>
+          <option value="EmotionRecognition"> Emotion Recognition</option>
+          <option value="FaceRecognition"> Face Recognition</option>
+          <option value="GestureRecognition"> Gesture Recognition</option>
+          <option value="ImageRecognition"> Image Recognition</option>
+          <option value="InformationRetrieval"> Information Retrieval</option>
+          <option value="LieDetection"> Lie Detection</option>
+          <option value="MachineTranslation"> Machine Translation</option>
+          <option value="MusicInformationRetrieval"> Music Information Retrieval</option>
+          <option value="NamedEntityRecognition"> Named Entity Recognition</option>
+          <option value="NaturalLanguageGeneration"> Natural Language Generation</option>
+          <option value="ObjectRecognition"> Object Recognition</option>
+          <option value="PartOfSpeechTagging"> Part Of Speech Tagging</option>
+          <option value="PatternRecognition"> Pattern Recognition</option>
+          <option value="PersonalityTraitsAnalysis"> Personality Traits Analysis</option>
+          <option value="Profiling"> Profiling</option>
+          <option value="QuestionAnswering"> Question Answering</option>
+          <option value="RelationshipExtraction"> Relationship Extraction</option>
+          <option value="SentimentAnalysis"> Sentiment Analysis</option>
+          <option value="SoundEventRecognition"> Sound Event Recognition</option>
+          <option value="SoundSourceSeparation"> Sound Source Separation</option>
+          <option value="SoundSynthesis"> Sound Synthesis</option>
+          <option value="SpeakerRecognition"> Speaker Recognition</option>
+          <option value="SpeechRecognition"> Speech Recognition</option>
+          <option value="SpeechSynthesis"> Speech Synthesis</option>
+          <option value="OtherCapability">Other</option>
+        </select>
+    </fieldset>
+    <fieldset>
+      <legend>User:</legend>
+      <select id="select-user"  >
+        <option selected="selected" value="">Any</option>
+        <option value="CompetentPublicAuthority"> Competent Public Authority </option>
+        <option value="CompetentPublicAuthorityRepresentative"> Competent Public Authority Representative</option>
+        <option value="EmergencyService"> Emergency Service</option>
+        <option value="FirstResponder"> First Responder</option>
+        <option value="JudicialAuthority"> Judicial Authority </option>
+        <option value="JudicialAuthorityRepresentative"> Judicial Authority Representative</option>
+        <option value="LawEnforcementAuthority"> Law Enforcement Authority</option>
+        <option value="LawEnforcementAuthorityRepresentative"> Law Enforcement Authority Representative</option>
+        <option value="NationalPublicAuthority"> National Public Authority</option>
+        <option value="PublicAuthority"> Public Authority</option>
+        <option value="PublicAuthorityRepresentative"> Public Authority Representative</option>
+        <option value="OtherUser">Other</option>
+        </select> 
+    </fieldset>
+    <fieldset>
+      <legend>Subject:</legend>
+      <select id="subject" >
+        <option selected="selected" value="">Any</option>
+        <option value="AsylumSeeker"> Asylum Seeker</option>
+        <option value="CourseApplicant"> Course Applicant</option>
+        <option value="Employee"> Employee</option>
+        <option value="Group"> Group</option>
+        <option value="JobApplicant"> Job Applicant</option>
+        <option value="NaturalPerson"> Natural Person</option>
+        <option value="Passenger"> Passenger</option>
+        <option value="Perpetrator"> Perpetrator</option>
+        <option value="PotentialJobApplicant"> Potential Job Applicant</option>
+        <option value="PublicServicesApplicant"> Public Services Applicant</option>
+        <option value="ResidencePermitApplicant"> Residence Permit Applicant</option>
+        <option value="Suspect"> Suspect</option>
+        <option value="Victim"> Victim</option>
+        <option value="VisaApplicant"> Visa Applicant</option>
+          <option value="OtherSubject">Other</option>
+            </select>
+    </fieldset>
+
+  </form>
+  <button id="run">Check Risk Level</button>
+  <div id="response"></div>
+<script>
+// Load the rules file
+var rules = "";
+document.addEventListener("DOMContentLoaded", function(){
+  fetch("rules.n3").then((res) => res.text()).then((txt) => {
+    rules = txt ; 
+    console.log("rules loaded successfully: " + rules.length);
+  });
+});
+
+// Run the reasoner on input submission
+document.getElementById('run').addEventListener("click", async () => {
+  // Get data about AI System
+  var domain = document.getElementById("select-domain").value;
+  if (!domain) { domain = "GeneralDomain"; }
+  console.log("domain: " + domain);
+  var purpose = document.getElementById("select-purpose").value;
+  if (!purpose) { purpose = "GeneralPurpose"; }
+  console.log("purpose: " + purpose);
+
+  // TODO: replace hacky text with actual RDF statements
+  var data_graph = rules;
+  data_graph += "\nai:System airo:hasDomain ai:Domain . ai:Domain rdf:type vair:" + domain + "." ;
+  data_graph += "\nai:System airo:hasPurpose ai:Purpose . ai:Purpose rdf:type vair:" + purpose + "." ;
+  // console.log(data_graph);
+
+  var results = (await eyereasoner.n3reasoner(
+    data_graph, undefined, 
+    { output: 'derivations' })).replaceAll('\n', '<br>');
+  document.getElementById('response').innerHTML = results;
+  // console.log(results);
+});
+</script>
+</body>
+</html>
