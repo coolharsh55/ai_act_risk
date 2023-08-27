@@ -10,20 +10,31 @@
 # ai:System airo:hasPurpose vair:Analytics .
 
 # Annex III-2a
-
 airo:AIAct-AnnexIII2a rdfs:label "Annex III 2-a" .
-
 { ai:System airo:hasDomain vair:CriticalInfrastructure . 
 } => { ai:System airo:hasHighRiskDomain airo:AIAct-AnnexIII2a . } .
 { ai:System airo:hasPurpose vair:ManagementAndOperationOfSafety . 
 } => { ai:System airo:hasHighRiskPurpose airo:AIAct-AnnexIII2a . } .
 
+# Annex III-3a
+airo:AIAct-AnnexIII3a rdfs:label "Annex III 3-a" .
+{ ai:System airo:hasDomain vair:Education . 
+} => { ai:System airo:hasHighRiskDomain airo:AIAct-AnnexIII3a . } .
+{ ai:System airo:hasPurpose vair:AssigningPeopleToEducationalInstitutions . 
+} => { ai:System airo:hasHighRiskPurpose airo:AIAct-AnnexIII3a . } .
+
 # General Domain
 { ai:System airo:hasDomain vair:GeneralDomain . 
-} => { ai:System airo:hasMediumRiskDomain airo:AIAct-AnnexIII2a . } .
+} => { 
+    ai:System airo:hasMediumRiskDomain airo:AIAct-AnnexIII2a .
+    ai:System airo:hasMediumRiskDomain airo:AIAct-AnnexIII3a .
+    } .
 # General Purpose
 { ai:System airo:hasPurpose vair:GeneralPurpose . 
-} => { ai:System airo:hasMediumRiskPurpose airo:AIAct-AnnexIII2a . } .
+} => {
+    ai:System airo:hasMediumRiskPurpose airo:AIAct-AnnexIII2a . 
+    ai:System airo:hasMediumRiskPurpose airo:AIAct-AnnexIII3a . 
+    } .
 
 # High Risk
 {
