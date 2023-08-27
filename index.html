@@ -5,6 +5,7 @@
   <title>Risk Assessment Tool for AI Act</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="" />
+  <script src="https://unpkg.com/n3/browser/n3.min.js"></script>
   <script src="https://eyereasoner.github.io/eye-js/2/latest/index.js"></script>
   <style type="text/css">
     body {
@@ -221,7 +222,33 @@ document.getElementById('run').addEventListener("click", async () =>{
 
   var results = (await eyereasoner.n3reasoner(
     data_graph, undefined, 
-    { output: "derivations", outputType: "string" })).replaceAll('\n', '<br>');
+    { output: "deductive_closure", outputType: "quads" }));
+  // console.log(results);
+
+  const store = new N3.Store();
+  const { DataFactory } = N3;
+  const { namedNode, literal, defaultGraph, quad } = DataFactory;
+  for(const quad of results) {
+    store.add(quad);
+  };
+
+  results = "Results:";
+  for (const quad of store.match(null, namedNode('https://w3id.org/airo#isHighRiskBy'), null)) {
+    results += "<br/>High-risk clause matched: ";
+    for(const clause of store.match(namedNode(quad.object.id), null, null)) {
+      results += clause.object.value;
+    }
+  }
+  for (const quad of store.match(null, namedNode('https://w3id.org/airo#isMediumRiskBy'), null)) {
+    results += "<br/>Medium-risk with potential for High-Risk clause: ";
+    for(const clause of store.match(namedNode(quad.object.id), null, null)) {
+      results += clause.object.value;
+    }
+  }
+  for (const quad of store.match(null, namedNode('https://w3id.org/airo#isLowRiskBy'), null)) {
+    results += "<br/>Low-risk as no high-risk clause or condition matched";
+  }
+
   document.getElementById('response').innerHTML = results;
   // console.log(results);
 });

@@ -11,6 +11,8 @@
 
 # Annex III-2a
 
+airo:AIAct-AnnexIII2a rdfs:label "Annex III 2-a" .
+
 { ai:System airo:hasDomain vair:CriticalInfrastructure . 
 } => { ai:System airo:hasHighRiskDomain airo:AIAct-AnnexIII2a . } .
 { ai:System airo:hasPurpose vair:ManagementAndOperationOfSafety . 
