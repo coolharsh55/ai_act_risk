@@ -11,6 +11,7 @@
     body {
       max-width: 800px;
       margin: auto;
+      padding: 2px;
     }
     fieldset {
       width: 400px;
@@ -30,10 +31,31 @@
       font-family: monospace;
       width: 400px;
     }
+    #preset-examples > li {
+      padding: 1px;
+      margin: 1px;
+      border: 1px solid #333;
+      background: #EEE;
+      display: inline-block;
+    }
+    #random-example {
+      padding: 1px;
+      margin: 1px;
+      border: 1px solid #333;
+      background: #EEE;
+    }
   </style>
 </head>
 <body>
   <h1>Risk Assessment Tool for AI Act</h1>
+  <p>This tool provides a potential risk-level for the use of AI systems. Select one or more concepts and then click the <code>Check Risk Level</code> button. You can test various combinations or try pre-selected examples below or <span id="random-example">select random values</span>. The definitions of terms are provided at the <a href="#definitions">document end</a>.</p>
+  <ul id="preset-examples">
+    <li class="preset-example" data-domain="CriticalInfrastructure" data-purpose="ManagementAndOperationOfSafety">Management of Critical Infrastructure</li>
+    <li class="preset-example" data-domain="Education" data-purpose="AssigningPeopleToEducationalInstitutions">Admissions in Educational Institutes</li>
+  </ul>
+  <hr/>
+  <!-- TODO: Enable multiple select on each dropdown -->
+  <!-- requires corresponding changes to the code handling the dropdown inputs -->
   <form>
     <fieldset>
       <legend>Domain:</legend>
@@ -171,7 +193,7 @@
     </fieldset>
     <fieldset>
       <legend>Subject:</legend>
-      <select id="subject" >
+      <select id="select-subject" >
         <option selected="selected" value="">Any</option>
         <option value="AsylumSeeker">Asylum Seeker</option>
         <option value="CourseApplicant">Course Applicant</option>
@@ -193,7 +215,38 @@
 
   </form>
   <button id="run">Check Risk Level</button>
-  <div id="response"></div>
+  <hr/>
+  <h3>Results</h3>
+  <div id="response">results will appear here</div>
+
+  <hr/>
+
+  <section id="definitions">
+    <h2>Definitions</h2>
+    <p>Inputs are described in terms of the following concepts. For more details on the creation of the tool, methodology, and discussion - refer to the <a href="#acknowledgements">peer-reviewed publication</a>.</p>
+    <ul>
+      <li><code>Domain</code>: the domain or sector or area within which the AI system is or will be deployed; e.g. Health, Education</li>
+      <li><code>Purpose</code>: the purpose or end-goal for which the AI system is or will be used to achieve; e.g. Patient Diagnosis, Exam Assessment</li>
+      <li><code>Capability</code>: the capability or application for what the AI system is or will be used to provide; e.g. Facial Recognition, Sentiment Analysis</li>
+      <li><code>User</code>: the user or operator who is or will be using the AI system; e.g. Doctor, Teacher</li>
+      <li><code>Subject</code>: the subject or individual or group which the AI system is or will be used towards; e.g. Patients, Students</li>
+    </ul>
+
+     <p>The outputs represent a potential risk level that represents whether the selected combination satisfies the AI Act Annex III:</p>
+     <ul>
+      <li>High-risk means there is an exact match</li>
+      <li>Medium-risk means the combination can lead to a potential match (e.g. when the Purpose can take <i>Any</i> value)</li>
+      <li>Low-risk means the output does not match any clause (i.e. not high-risk) and does not have the potential to match any cause (i.e. not medium-risk).</li>
+    </ul>
+  </section>
+  
+  <hr/>
+
+  <section id="acknowledgements">
+    <h2>Acknowledgements</h2>
+    <p>This implementation is by <a href="https://harshp.com/">Harshvardhan J. Pandit</a> based on the below work. Source code is available via <a href="https://github.com/coolharsh55/ai_act_risk">GitHub repo</a> under a permissive license.</p>
+    <p>Cite this work as: <i>Delaram Golpayegani, Harshvardhan J. Pandit, and Dave Lewis</i>. "<strong>To Be High-Risk, or Not To Be—Semantic Specifications and Implications of the AI Act’s High-Risk AI Applications and Harmonised Standards</strong>" Proceedings of the 2023 ACM Conference on Fairness, Accountability, and Transparency. 2023. <a href="https://doi.org/10.1145/3593013.3594050">https://doi.org/10.1145/3593013.3594050</a></p>
+  </section>
 <script>
 // Load the rules file
 var rules = "";
@@ -204,21 +257,69 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 
+document.addEventListener("DOMContentLoaded", function(){
+  // Implement pre-configured examples
+  for(var example of document.getElementsByClassName("preset-example")) {
+    example.addEventListener("click", function(ele) {
+      // Domain
+      if(ele.target.dataset.domain != undefined) {
+        for(const option of document.getElementById('select-domain')) {
+          if(option.value == ele.target.dataset.domain) {
+            document.getElementById('select-domain').value = option.value;
+            break;
+          }
+        }
+      }
+      // Purpose
+      if(ele.target.dataset.purpose != undefined) {
+        for(const option of document.getElementById('select-purpose')) {
+          if(option.value == ele.target.dataset.purpose) {
+            document.getElementById('select-purpose').value = option.value;
+            break;
+          }
+        }
+      }
+
+      // run the reasoner via on click event
+      document.getElementById('run').click();
+    });
+  };
+
+  // Implement random selection
+  var randomise_option =  function(list) {
+    list.value = list[Math.floor(Math.random() * list.length)].value;
+  }
+  document.getElementById("random-example").addEventListener("click", async() => {
+    randomise_option(document.getElementById('select-domain'));
+    randomise_option(document.getElementById('select-purpose'));
+    randomise_option(document.getElementById('select-capability'));
+    randomise_option(document.getElementById('select-user'));
+    randomise_option(document.getElementById('select-subject'));
+    document.getElementById('run').click();
+  });
+});
+
+// TODO: Implement features for Capability, User, Subject
+// currently only Domain and Purpose are used for demo
+
 // Run the reasoner on input submission
 document.getElementById('run').addEventListener("click", async () =>{
   // Get data about AI System
   var domain = document.getElementById("select-domain").value;
   if (!domain) { domain = "GeneralDomain"; }
-  console.log("domain: " + domain);
+  // console.log("domain: " + domain);
   var purpose = document.getElementById("select-purpose").value;
   if (!purpose) { purpose = "GeneralPurpose"; }
-  console.log("purpose: " + purpose);
+  // console.log("purpose: " + purpose);
 
   // TODO: replace hacky text with actual RDF statements
   var data_graph = rules;
   data_graph += "\nai:System airo:hasDomain vair:" + domain + "." ;
   data_graph += "\nai:System airo:hasPurpose vair:" + purpose + "." ;
   // console.log(data_graph);
+
+  // TODO: add rdfs reasoning to EYE rules so that a taxonomy can be used
+  // in the reasoning of risk levels
 
   var results = (await eyereasoner.n3reasoner(
     data_graph, undefined, 
