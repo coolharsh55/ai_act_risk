@@ -1,32 +1,9 @@
-# Is My AI System High Risk?
-Web application to determine whether an AI system is high-risk as per Annex III of the EU AI Act.
+# Risk Assessment Tool for AI Act
 
-## Instruction
-To run the application:
-1. Clone the repository: 
-```git clone https://github.com/DelaramGlp/highrisk_app.git```
-2. Install the requirements: 
-```pip install -r requirements.txt```
-3.  Run the application using 
-```Python3 app.py```
-4. Go to [http://127.0.0.1:8000/highrisk](http://127.0.0.1:8000/highrisk)
+See https://harshp.com/ai_act_risk/
 
-## Disclaimer
+This implementation is by Harshvardhan J. Pandit based on the below work. It uses the [Notation3 language](https://w3c.github.io/N3/reports/20230703) to express information and rules to derive inferences entirely in-browser/client-side using the [EYE-js](https://github.com/eyereasoner/eye-js) reasoner. 
 
-This tool only offers guidance and does not provide any legal advice. 
+The original tool is available at: https://regtech.adaptcentre.ie/highrisk
 
-This tool does not determine prohibited AI practices. Before using the tool, ensure your AI system does not fall under the prohibited category of AI defined in Article 5. 
-
-## Licence
-The tool is available under the [MIT License (MIT)](https://mit-license.org/).
-
-## Referencing
-To cite this work please use: 
-Golpayegani, D., Pandit, H. J., & Lewis, D. (2023, June). To Be High-Risk, or Not To Be—Semantic Specifications and Implications of the AI Act’s High-Risk AI Applications and Harmonised Standards. In Proceedings of the 2023 ACM Conference on Fairness, Accountability, and Transparency (pp. 905-915).
-
-
-## Contact details
-
-Delaram Golpayegani
-
-Email: delaram.golpayegani@adaptcentre.ie
+Cite this work as: Delaram Golpayegani, Harshvardhan J. Pandit, and Dave Lewis. "To Be High-Risk, or Not To Be—Semantic Specifications and Implications of the AI Act’s High-Risk AI Applications and Harmonised Standards" Proceedings of the 2023 ACM Conference on Fairness, Accountability, and Transparency. 2023. https://doi.org/10.1145/3593013.3594050
