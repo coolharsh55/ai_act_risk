@@ -50,8 +50,8 @@
   <h1>Risk Assessment Tool for AI Act</h1>
   <p>This tool provides a potential risk-level for the use of AI systems. Select one or more concepts and then click the <code>Check Risk Level</code> button. You can test various combinations or try pre-selected examples below or <span id="random-example">select random values</span>. The definitions of terms are provided at the <a href="#definitions">document end</a>.</p>
   <ul id="preset-examples">
-    <li class="preset-example" data-domain="CriticalInfrastructure" data-purpose="ManagementAndOperationOfSafety">Management of Critical Infrastructure</li>
-    <li class="preset-example" data-domain="Education" data-purpose="AssigningPeopleToEducationalInstitutions">Admissions in Educational Institutes</li>
+    <li class="preset-example" data-domain="" data-purpose="" data-capability="" data-user="" data-subject="">Reset All</li>
+    <li class="preset-example" data-domain="Education" data-purpose="AssessingHealthRisk" data-capability="EmotionRecognition" data-subject="NaturalPerson">Assessing health risk in Educational Institutes</li>
   </ul>
   <hr/>
   <!-- TODO: Enable multiple select on each dropdown -->
@@ -129,7 +129,7 @@
         <option value="ReclaimingPublicAssistanceServices">Reclaiming Public Assistance Services</option>
         <option value="Recruiting">Recruiting</option>
         <option value="ReducingPublicAssistanceServices">Reducing Public Assistance Services</option>
-        <option value="RemoteIdentificationOfPeople">Remote Identification Of People</option>
+        <option value="RemoteIdentification">Remote Identification Of People</option>
         <option value="RevokingPublicAssistanceServices">Revoking Public Assistance Services</option>
         <option value="VerificationOfAsylumSeekerClaims">Verification Of Asylum Seeker Claims</option>
         <option value="VerificationOfMigrationSeekerClaims">Verification Of Migration Seeker Claims</option>
@@ -250,10 +250,15 @@
 <script>
 // Load the rules file
 var rules = "";
+var rules_fuzzy = "";
 document.addEventListener("DOMContentLoaded", function(){
-  fetch("rules.n3").then((res) =>res.text()).then((txt) =>{
+  fetch("rules_explicit.n3").then((res) => res.text()).then((txt) =>{
     rules = txt ; 
-    console.log("rules loaded successfully: " + rules.length);
+    console.log("explicit rules loaded successfully: " + rules.length);
+  });
+  fetch("rules_fuzzy.n3").then((res) => res.text()).then((txt) =>{
+    rules_fuzzy = txt ; 
+    console.log("fuzzy rules loaded successfully: " + rules_fuzzy.length);
   });
 });
 
@@ -275,6 +280,33 @@ document.addEventListener("DOMContentLoaded", function(){
         for(const option of document.getElementById('select-purpose')) {
           if(option.value == ele.target.dataset.purpose) {
             document.getElementById('select-purpose').value = option.value;
+            break;
+          }
+        }
+      }
+      // Capability
+      if(ele.target.dataset.purpose != undefined) {
+        for(const option of document.getElementById('select-capability')) {
+          if(option.value == ele.target.dataset.capability) {
+            document.getElementById('select-capability').value = option.value;
+            break;
+          }
+        }
+      }
+      // User
+      if(ele.target.dataset.user != undefined) {
+        for(const option of document.getElementById('select-user')) {
+          if(option.value == ele.target.dataset.user) {
+            document.getElementById('select-user').value = option.value;
+            break;
+          }
+        }
+      }
+      // Subject
+      if(ele.target.dataset.subject != undefined) {
+        for(const option of document.getElementById('select-subject')) {
+          if(option.value == ele.target.dataset.subject) {
+            document.getElementById('select-subject').value = option.value;
             break;
           }
         }
@@ -311,11 +343,23 @@ document.getElementById('run').addEventListener("click", async () =>{
   var purpose = document.getElementById("select-purpose").value;
   if (!purpose) { purpose = "GeneralPurpose"; }
   // console.log("purpose: " + purpose);
+  var capability = document.getElementById("select-capability").value;
+  if (!capability) { capability = "GeneralCapability"; }
+  // console.log("capability: " + capability);
+  var user = document.getElementById("select-user").value;
+  if (!user) { user = "GeneralUser"; }
+  // console.log("user: " + user);
+  var subject = document.getElementById("select-subject").value;
+  if (!subject) { subject = "GeneralSubject"; }
+  // console.log("subject: " + subject);
 
   // TODO: replace hacky text with actual RDF statements
   var data_graph = rules;
   data_graph += "\nai:System airo:hasDomain vair:" + domain + "." ;
   data_graph += "\nai:System airo:hasPurpose vair:" + purpose + "." ;
+  data_graph += "\nai:System airo:hasCapability vair:" + capability + "." ;
+  data_graph += "\nai:System airo:hasUser vair:" + user + "." ;
+  data_graph += "\nai:System airo:hasSubject vair:" + subject + "." ;
   // console.log(data_graph);
 
   // TODO: add rdfs reasoning to EYE rules so that a taxonomy can be used
@@ -333,25 +377,70 @@ document.getElementById('run').addEventListener("click", async () =>{
     store.add(quad);
   };
 
-  results = "Results:";
+  var output = "";
+  for (const quad of store.match(null, namedNode('https://w3id.org/airo#isProhibitedBy'), null)) {
+    output += "<br/>Prohibited by: ";
+    for(const clause of store.match(namedNode(quad.object.id), null, null)) {
+      output += clause.object.value;
+    }
+    for (const quad of store.match(null, namedNode('https://w3id.org/airo#hasProhibitionExemptedBy'), null)) {
+      output += "<br/>Prohibition exempted by: ";
+      for(const clause of store.match(namedNode(quad.object.id), null, null)) {
+        output += clause.object.value;
+      }
+    }
+  }
   for (const quad of store.match(null, namedNode('https://w3id.org/airo#isHighRiskBy'), null)) {
-    results += "<br/>High-risk clause matched: ";
+    output += "<br/>High-risk clause matched: ";
     for(const clause of store.match(namedNode(quad.object.id), null, null)) {
-      results += clause.object.value;
+      output += clause.object.value;
     }
-  }
-  for (const quad of store.match(null, namedNode('https://w3id.org/airo#isMediumRiskBy'), null)) {
-    results += "<br/>Medium-risk with potential for High-Risk clause: ";
-    for(const clause of store.match(namedNode(quad.object.id), null, null)) {
-      results += clause.object.value;
-    }
-  }
-  for (const quad of store.match(null, namedNode('https://w3id.org/airo#isLowRiskBy'), null)) {
-    results += "<br/>Low-risk as no high-risk clause or condition matched";
   }
 
-  document.getElementById('response').innerHTML = results;
+  /******* FUZZY ******/
+
+  data_graph += rules_fuzzy;
+  // data_graph += "\nai:System airo:hasDomain vair:" + domain + "." ;
+  // data_graph += "\nai:System airo:hasPurpose vair:" + purpose + "." ;
+  // data_graph += "\nai:System airo:hasCapability vair:" + capability + "." ;
+  // data_graph += "\nai:System airo:hasUser vair:" + user + "." ;
+  // data_graph += "\nai:System airo:hasSubject vair:" + subject + "." ;
+  // console.log(data_graph);
+
+  // TODO: add rdfs reasoning to EYE rules so that a taxonomy can be used
+  // in the reasoning of risk levels
+
+  results = (await eyereasoner.n3reasoner(
+    data_graph, undefined, 
+    { output: "deductive_closure", outputType: "quads" }));
   // console.log(results);
+
+  const store2 = new N3.Store();
+  for(const quad of results) {
+    store2.add(quad);
+  };
+
+  for (const quad of store2.match(null, namedNode('https://w3id.org/airo#canBeProhibitedBy'), null)) {
+    output += "<br/>Can be Prohibited by: ";
+    for(const clause of store2.match(namedNode(quad.object.id), null, null)) {
+      output += clause.object.value;
+    }
+    for (const quad of store2.match(null, namedNode('https://w3id.org/airo#canBeProhibitionExemptedBy'), null)) {
+      output += "<br/>Can be Prohibition exempted by: ";
+      for(const clause of store2.match(namedNode(quad.object.id), null, null)) {
+        output += clause.object.value;
+      }
+    }
+  }
+  for (const quad of store2.match(null, namedNode('https://w3id.org/airo#canBeHighRiskBy'), null)) {
+    output += "<br/>Can be High-risk by: ";
+    for(const clause of store2.match(namedNode(quad.object.id), null, null)) {
+      output += clause.object.value;
+    }
+  }
+
+  document.getElementById('response').innerHTML = "Output:" + output;
+  // console.log(output);
 });
 </script>
 </body>

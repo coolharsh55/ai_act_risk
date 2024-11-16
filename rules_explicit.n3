@@ -1,0 +1,53 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> . 
+@prefix ai: <http://example.org/input#> .
+@prefix airo: <https://w3id.org/airo#> .
+@prefix vair: <https://w3id.org/vair#> .
+
+# Testing Data
+# ai:System airo:hasDomain vair:CriticalInfrastructure .
+# ai:System airo:hasPurpose vair:Analytics .
+airo:AIAct-TestAnnex rdfs:label "Test Annex" .
+
+# AI Act Annex clause labels
+airo:AIAct-AnnexIII1a rdfs:label "Annex III 1-a" .
+airo:AIAct-AnnexIII1b rdfs:label "Annex III 1-b" .
+airo:AIAct-AnnexIII2a rdfs:label "Annex III 2-a" .
+airo:AIAct-AnnexIII3a rdfs:label "Annex III 3-a" .
+# AI Act prohibited clauses
+airo:AIAct-51f rdfs:label "Art.5-1f" .
+
+# III-1a
+{
+    ai:System airo:hasPurpose vair:RemoteIdentification .
+    ai:System airo:hasCapability vair:BiometricIdentification  .
+    ai:System airo:hasSubject vair:NaturalPerson .
+} => {
+    ai:System airo:isHighRiskBy airo:AIAct-AnnexIII1a .
+} .
+# III-1b
+{
+    ai:System airo:hasPurpose vair:Categorisation .
+    ai:System airo:hasCapability ?capability .
+    ?capability list:in ( vair:BiometricCategorisation vair:SensitiveAttributeInference ) .
+    ai:System airo:hasSubject vair:NaturalPerson .
+} => {
+    ai:System airo:isHighRiskBy airo:AIAct-AnnexIII1b .
+} .
+# 5-1f
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:Employment vair:Education ) .
+    ai:System airo:hasCapability vair:EmotionRecognition .
+    ai:System airo:hasSubject vair:NaturalPerson .
+} => {
+    ai:System airo:isProhibitedBy airo:AIAct-51f .
+} .
+{
+    ai:System airo:isProhibitedBy airo:AIAct-51f .
+    ai:System airo:hasPurpose vair:AssessingHealthRisk .
+} => {
+    ai:System airo:hasProhibitionExemptedBy airo:AIAct-51f .
+} .
