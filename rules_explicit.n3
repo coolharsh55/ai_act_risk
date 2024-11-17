@@ -14,10 +14,59 @@ airo:AIAct-TestAnnex rdfs:label "Test Annex" .
 # AI Act Annex clause labels
 airo:AIAct-AnnexIII1a rdfs:label "Annex III 1-a" .
 airo:AIAct-AnnexIII1b rdfs:label "Annex III 1-b" .
-airo:AIAct-AnnexIII2a rdfs:label "Annex III 2-a" .
+airo:AIAct-AnnexIII2 rdfs:label "Annex III 2" .
 airo:AIAct-AnnexIII3a rdfs:label "Annex III 3-a" .
+airo:AIAct-AnnexIII3b rdfs:label "Annex III 3-b" .
+airo:AIAct-AnnexIII3c rdfs:label "Annex III 3-c" .
+airo:AIAct-AnnexIII3d rdfs:label "Annex III 3-d" .
+airo:AIAct-AnnexIII4a rdfs:label "Annex III 4-a" .
+airo:AIAct-AnnexIII4b rdfs:label "Annex III 4-b" .
+airo:AIAct-AnnexIII5a rdfs:label "Annex III 5-a" .
+airo:AIAct-AnnexIII5b rdfs:label "Annex III 5-b" .
+airo:AIAct-AnnexIII5c rdfs:label "Annex III 5-c" .
+airo:AIAct-AnnexIII5d rdfs:label "Annex III 5-d" .
 # AI Act prohibited clauses
 airo:AIAct-51f rdfs:label "Art.5-1f" .
+
+vair:CriticalDigitalInfrastructure rdfs:subClassOf vair:CriticalInfrastructure .
+vair:RoadTraffic rdfs:subClassOf vair:CriticalInfrastructure .
+vair:WaterSupply rdfs:subClassOf vair:CriticalInfrastructure .
+vair:GasSupply rdfs:subClassOf vair:CriticalInfrastructure .
+vair:HeatingSupply rdfs:subClassOf vair:CriticalInfrastructure .
+vair:ElectricSupply rdfs:subClassOf vair:CriticalInfrastructure .
+
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain rdfs:subClassOf ?parent .
+} => {
+    ai:System airo:hasDomain ?parent .
+} .
+{
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose rdfs:subClassOf ?parent .
+} => {
+    ai:System airo:hasPurpose ?parent .
+} .
+{
+    ai:System airo:hasCapability ?capability .
+    ?domain rdfs:subClassOf ?parent .
+} => {
+    ai:System airo:hasCapability ?parent .
+} .
+{
+    ai:System airo:hasUser ?user .
+    ?user rdfs:subClassOf ?parent .
+} => {
+    ai:System airo:hasUser ?parent .
+} .
+{
+    ai:System airo:hasSubject ?subject .
+    ?subject rdfs:subClassOf ?parent .
+} => {
+    ai:System airo:hasSubject ?parent .
+} .
+
+##### HIGH RISK #####
 
 # III-1a
 {
@@ -36,6 +85,191 @@ airo:AIAct-51f rdfs:label "Art.5-1f" .
 } => {
     ai:System airo:isHighRiskBy airo:AIAct-AnnexIII1b .
 } .
+# III-1c
+{
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:RecognisingEmotions vair:DetectingEmotionalState ) .
+    ai:System airo:hasCapability ?capability .
+    ?capability list:in ( vair:EmotionRecognition vair:BiometricsBasedEmotionRecognition ) .
+    airo:System list:in ?subject .
+    ?subject list:in ( airo:NaturalPerson ) .
+} => {
+    ai:System airo:isighRiskBy airo:AIAct-AnnexIII1c .
+} .
+# III-2
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:CriticalInfrastructure ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:ManageProcesses vair:CarryOutOperations ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII2 .
+} .
+# III-3a
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:Education ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:DetermineAccessToEducationalInstitution vair:DetermineAdmissionToEducationalInstitution vair:AssignPersonToEducationalInstitution ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:NaturalPerson ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII3a .
+} .
+# III-3b
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:Education ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:EvaluatingLearningOutcomes ) .
+    ai:System airo:hasDeployer ?deployer .
+    # TODO: Add deployer field to the form
+    ?deployer list:in ( vair:EducationalInstitution ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:CourseAttendee vair:NaturalPerson ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII3b .
+} . 
+# III-3c
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:Education ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:AssessingLevelOfEducation vair:AssessingAccessibleLevelOfEducation ) .
+    ai:System airo:hasDeployer ?deployer .
+    ?deployer list:in ( vair:EducationalInstitution ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:CourseAttendee vair:NaturalPerson ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII3c .
+} . 
+# III-3d
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:Education ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:MonitoringProhibitedBehaviourDuringTest vair:DetectingProhibitedBehaviourDuringTest ) .
+    ?deployer list:in ( vair:EducationalInstitution ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:CourseAttendee vair:Student ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII3d .
+} . 
+# III-4a
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:Employment ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:Recruiting vair:JobCandidateSelection  vair:PlacingTargetedJobAdvert 
+        vair:JobApplicationAnalysis vair:JobApplicationScreening vair:JobApplicationFiltering
+        vair:EvaluatingJobInterview vair:EvaluatingJobCandidates  ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:JobApplicant vair:PotentialJobApplicant vair:JobCandidate vair:NaturalPerson ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII4a .
+} . 
+# III-4b
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:Employment ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:MakingDecisionOnTermsofWorkRelatedRelations    
+        vair:MakingPromotionDecision
+        vair:MakingContractTerminationDecision 
+        vair:MonitoringEmployeeBehaviour
+        vair:MonitoringEmployeePerformance
+        vair:EvaluatingEmployeeBehaviour
+        vair:EvaluatingEmployeePerformance ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:Employee vair:NaturalPerson ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII4b .
+} . 
+# III-4b
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:Employment ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:AllocatingTasks ) .
+    ai:System airo:hasCapability ?capability .
+    ?capbility list:in ( vair:BehaviourAnalysis vair:PersonalityTraitsAnalysis ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:Employee vair:NaturalPerson ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII4b .
+} . 
+# III-5a
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:PublicService ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:EvaluatingEligibilityForPublicAssistanceServices
+        vair:GrantingPublicAssistanceServices
+        vair:RevokingPublicAssistanceServices
+        vair:ReclaimingPublicAssistanceServices
+        vair:ReducingPublicAssistanceServices
+        vair:EvaluatingEligibilityforHealthCareServices ) .
+    ai:System airo:hasDeployer ?deployer .
+    ?deployer list:in ( vair:PublicAuthority ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:PublicServicesApplicant vair:NaturalPerson vair:Family vair:PotentialPublicServicesApplicant vair:PublicServicesRecipient ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII5a .
+} . 
+# III-5b
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:PublicService vair:PrivateService ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:AssessingCreditworthiness vair:DeterminingCreditScore ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:NaturalPerson ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII5b .
+} . 
+# III-5c
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:PublicService vair:PrivateService ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:HealthInsuranceRiskAssessment
+                        vair:HealthInsurancePricing
+                        vair:LifeInsuranceRiskAssessment
+                        vair:LifeInsurancePricing ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:NaturalPerson ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII5c .
+} . 
+# III-5d
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:PublicService vair:PrivateService ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:DispatchingEmergencyService 
+        vair:PrioritisationOfEmergencyService vair:EmergancyTriage ) .
+    ai:System airo:hasDeployer ?deployer .
+    ?deployer list:in ( vair:EmergencyServiceProvider 
+        vair:EmergencyHealthCareProvider vair:Police 
+        vair:FireBrigade vair:MedicalAidProvider ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII5d .
+} . 
+# III-5d
+{
+    ai:System airo:hasDomain ?domain .
+    ?domain list:in ( vair:PublicService vair:PrivateService ) .
+    ai:System airo:hasPurpose ?purpose .
+    ?purpose list:in ( vair:EvaluatingEmergencyCall 
+        vair:ClassifyingEmergencyCall ) .
+    ai:System airo:hasSubject ?subject .
+    ?subject list:in ( vair:NaturalPerson ) .
+} => {
+    airo:System airo:isHighRiskBy airo:AIAct-AnnexIII5d .
+} . 
+
+##### PROHIBITED #####
+
 # 5-1f
 {
     ai:System airo:hasDomain ?domain .

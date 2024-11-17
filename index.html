@@ -59,13 +59,20 @@
   <form>
     <fieldset>
       <legend>Domain:</legend>
-      <select id="select-domain">
+      <select multiple id="select-domain">
               <option selected="selected" value="">Any</option>
               <option value="AdministrationOfDemocraticProcesses">Administration Of Democratic Processes</option>
               <option value="AdministrationOfJustice">Administration Of Justice</option>
               <option value="Asylum">Asylum</option>
               <option value="BorderControl">Border Control</option>
               <option value="CriticalInfrastructure">Critical Infrastructure</option>
+
+              <option value="CriticalDigitalInfrastructure">Critical Digital Infrastructure</option>
+              <option value="RoadTraffic">Road Traffic</option>
+              <option value="WaterSupply">Water Supply</option>
+              <option value="GasSupply">Gas Supply</option>
+              <option value="HeatingSupply">Heating Supply</option>
+              <option value="ElectricSupply">Electric Supply</option>
               <option value="Education">Education</option>
               <option value="Employment">Employment</option>
               <option value="LawEnforcement">Law Enforcement</option>
@@ -77,8 +84,10 @@
     </fieldset>
     <fieldset>
       <legend>Purpose:</legend>
-      <select id="select-purpose">
+      <select multiple id="select-purpose">
         <option selected="selected" value="">Any</option>
+        <option value="ManageProcesses">Manage Processes</option>
+        <option value="CarryOutOperations">Carry out Operations</option>
         <option value="AdvertisingVacancies">Advertising Vacancies</option>
         <option value="ApplyingTheLawToFacts">Applying The Law To Facts</option>
         <option value="AssessingCreditworthiness">Assessing Creditworthiness</option>
@@ -138,7 +147,7 @@
     </fieldset>
     <fieldset>
       <legend>Capability:</legend>
-      <select id="select-capability"  >
+      <select multiple id="select-capability"  >
           <option selected="selected" value="">Any</option>
           <option value="ActionRecognition">Action Recognition</option>
           <option value="AutomaticSummarisation">Automatic Summarisation</option>
@@ -175,7 +184,7 @@
     </fieldset>
     <fieldset>
       <legend>User:</legend>
-      <select id="select-user"  >
+      <select multiple id="select-user"  >
         <option selected="selected" value="">Any</option>
         <option value="CompetentPublicAuthority">Competent Public Authority </option>
         <option value="CompetentPublicAuthorityRepresentative">Competent Public Authority Representative</option>
@@ -193,7 +202,7 @@
     </fieldset>
     <fieldset>
       <legend>Subject:</legend>
-      <select id="select-subject" >
+      <select multiple id="select-subject" >
         <option selected="selected" value="">Any</option>
         <option value="AsylumSeeker">Asylum Seeker</option>
         <option value="CourseApplicant">Course Applicant</option>
@@ -336,30 +345,40 @@ document.addEventListener("DOMContentLoaded", function(){
 
 // Run the reasoner on input submission
 document.getElementById('run').addEventListener("click", async () =>{
-  // Get data about AI System
-  var domain = document.getElementById("select-domain").value;
-  if (!domain) { domain = "GeneralDomain"; }
-  // console.log("domain: " + domain);
-  var purpose = document.getElementById("select-purpose").value;
-  if (!purpose) { purpose = "GeneralPurpose"; }
-  // console.log("purpose: " + purpose);
-  var capability = document.getElementById("select-capability").value;
-  if (!capability) { capability = "GeneralCapability"; }
-  // console.log("capability: " + capability);
-  var user = document.getElementById("select-user").value;
-  if (!user) { user = "GeneralUser"; }
-  // console.log("user: " + user);
-  var subject = document.getElementById("select-subject").value;
-  if (!subject) { subject = "GeneralSubject"; }
-  // console.log("subject: " + subject);
-
   // TODO: replace hacky text with actual RDF statements
   var data_graph = rules;
-  data_graph += "\nai:System airo:hasDomain vair:" + domain + "." ;
-  data_graph += "\nai:System airo:hasPurpose vair:" + purpose + "." ;
-  data_graph += "\nai:System airo:hasCapability vair:" + capability + "." ;
-  data_graph += "\nai:System airo:hasUser vair:" + user + "." ;
-  data_graph += "\nai:System airo:hasSubject vair:" + subject + "." ;
+  // Get data about AI System
+  var domain = Array.from(document.querySelectorAll('#select-domain option:checked')).map(option => option.value);
+  if (domain.length === 1 && domain[0] === "") { domain = ["GeneralDomain"]; }
+  // console.log(domain);
+  for(const option of domain) {
+    data_graph += "\nai:System airo:hasDomain vair:" + option + "." ;
+  }
+  var purpose = Array.from(document.querySelectorAll('#select-purpose option:checked')).map(option => option.value);
+  if (purpose.length === 1 && purpose[0] === "") { purpose = ["GeneralPurpose"];  }
+  // console.log(purpose);
+  for(const option of purpose) {
+    data_graph += "\nai:System airo:hasPurpose vair:" + option + "." ;
+  }
+  var capability = Array.from(document.querySelectorAll('#select-capability option:checked')).map(option => option.value);
+  if (capability.length === 1 && capability[0] === "") { capability = ["GeneralCapability"];  }
+  // console.log(capability);
+  for(const option of capability) {
+    data_graph += "\nai:System airo:hasCapability vair:" + option + "." ;
+  }
+  var user = Array.from(document.querySelectorAll('#select-user option:checked')).map(option => option.value);
+  if (user.length === 1 && user[0] === "") { user = ["GeneralUser"];  }
+  // console.log(user);
+  for(const option of user) {
+    data_graph += "\nai:System airo:hasUser vair:" + option + "." ;
+  }
+  var subject = Array.from(document.querySelectorAll('#select-subject option:checked')).map(option => option.value);
+  if (subject.length === 1 && subject[0] === "") { subject = ["GeneralSubject"];  }
+  // console.log(subject);
+  for(const option of subject) {
+    data_graph += "\nai:System airo:hasSubject vair:" + option + "." ;
+  }
+
   // console.log(data_graph);
 
   // TODO: add rdfs reasoning to EYE rules so that a taxonomy can be used
